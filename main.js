@@ -6,7 +6,7 @@ const dinos = [
       age: 100,
       owner: 'Zoe',
       adventures: [],
-      health: 100,
+      health: 99,
       imageUrl: 'https://images-na.ssl-images-amazon.com/images/I/61fC04pumjL._AC_SL1001_.jpg'
     },
     {
@@ -16,7 +16,7 @@ const dinos = [
       age: 1,
       owner: 'Mary',
       adventures: [],
-      health: 100,
+      health: 1,
       imageUrl: 'https://images-na.ssl-images-amazon.com/images/I/61fC04pumjL._AC_SL1001_.jpg'
     },
     {
@@ -26,7 +26,7 @@ const dinos = [
       age: 55,
       owner: 'Luke',
       adventures: [],
-      health: 100,
+      health: 45,
       imageUrl: 'https://images-na.ssl-images-amazon.com/images/I/61fC04pumjL._AC_SL1001_.jpg'
     }
   ];
@@ -37,6 +37,7 @@ const printToDom = (divId, textToPrint) => {
     selectedDiv.innerHTML = textToPrint;
 }
 
+// VIEW SINGLE DINO
 const viewSingleDino = (e) => {
     const dinoId = e.target.closest('.card').id;
     const selectedDino = dinos.find((currentDino) => dinoId === currentDino.id);
@@ -61,18 +62,37 @@ const viewSingleDino = (e) => {
     document.getElementById('close-single-view').addEventListener('click', closeSingleViewEvent);
 };
 
+// CLOSE SINGLE VIEW
 const closeSingleViewEvent = () => {
     printToDom('single-view', '');
     printDinos(dinos);
 };
 
 
-// EVENT LISTENER for viewing single dino -- need to creat viewSingleDino func
+// EVENT LISTENER for viewing single dino
 const singleDinoAddEvents = () => {
     const dinoViewButtons = document.getElementsByClassName('single-dino');
     for (let i = 0; i < dinoViewButtons.length; i++) {
         dinoViewButtons[i].addEventListener('click', viewSingleDino);
     }
+};
+
+// PET DINO EVENT
+const petEvents = () => {
+    const dinoPetButtons = document.getElementsByClassName('dino-photo');
+    for (let i = 0; i < dinoPetButtons.length; i++) {
+        dinoPetButtons[i].addEventListener('mouseleave', dinoHealth);
+    }
+};
+
+// DINO HEALTH FUNCTION
+const dinoHealth = (e) => {
+    const dinoId = e.target.closest('.card').id;
+    const dinoPosition = dinos.findIndex((currentDino) => currentDino.id === dinoId)
+    if (dinos[dinoPosition].health < 100) {
+    dinos[dinoPosition].health += 1;
+    printDinos(dinos);
+    };
 };
 
 // PRINT DINOS FUNC
@@ -81,7 +101,7 @@ const printDinos = (dinoArray) => {
     for (let i =0; i < dinoArray.length; i++){
       domString += '<div class="col-4">';
       domString += `<div class="card" id="${dinoArray[i].id}">`;
-      domString += `<img class="card-img-top" src="${dinoArray[i].imageUrl}" alt="Card image cap">`;
+      domString += `<img class="card-img-top dino-photo" src="${dinoArray[i].imageUrl}" alt="Card image cap">`;
       domString += '<div class="card-body">';
       domString += `  <h5 class="card-title">${dinoArray[i].name}</h5>`;
       domString += `  <p class="card-text">Health: ${dinoArray[i].health}</p>`;
@@ -92,6 +112,7 @@ const printDinos = (dinoArray) => {
     }
     printToDom('kennel', domString);
     singleDinoAddEvents();
+    petEvents();
   };
 
 // CREATE DINO IN ACCORDION FORM
