@@ -15,8 +15,11 @@ const newDino = (e) => {
             imageUrl: document.getElementById('dino-image').value
         }
     dinos.push(brandNewDino);
+    console.log('hi from newDino', dinos);
     document.getElementById('new-dino-form').reset();
+    document.getElementById('collapseOne').classList.remove('show');
 };
+
 
 const init = () => {
     document.getElementById('submit-new-dino').addEventListener('click', newDino);
