@@ -6,7 +6,7 @@ const dinos = [
       age: 100,
       owner: 'Zoe',
       adventures: [],
-      health: 100,
+      health: 99,
       imageUrl: 'https://images-na.ssl-images-amazon.com/images/I/61fC04pumjL._AC_SL1001_.jpg'
     },
     {
@@ -89,9 +89,11 @@ const petEvents = () => {
 const dinoHealth = (e) => {
     const dinoId = e.target.closest('.card').id;
     const dinoPosition = dinos.findIndex((currentDino) => currentDino.id === dinoId)
+    if (dinos[dinoPosition].health < 100) {
     dinos[dinoPosition].health += 1;
     printDinos(dinos);
-}
+    };
+};
 
 // PRINT DINOS FUNC
 const printDinos = (dinoArray) => {
