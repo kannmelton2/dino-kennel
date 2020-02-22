@@ -77,14 +77,6 @@ const singleDinoAddEvents = () => {
     }
 };
 
-// PET DINO EVENT
-const petEvents = () => {
-    const dinoPetButtons = document.getElementsByClassName('dino-photo');
-    for (let i = 0; i < dinoPetButtons.length; i++) {
-        dinoPetButtons[i].addEventListener('mouseleave', dinoHealth);
-    }
-};
-
 // DINO HEALTH FUNCTION
 const dinoHealth = (e) => {
     const dinoId = e.target.closest('.card').id;
@@ -94,6 +86,30 @@ const dinoHealth = (e) => {
     printDinos(dinos);
     };
 };
+
+// PET DINO EVENT
+const petEvents = () => {
+    const dinoPetButtons = document.getElementsByClassName('dino-photo');
+    for (let i = 0; i < dinoPetButtons.length; i++) {
+        dinoPetButtons[i].addEventListener('mouseleave', dinoHealth);
+    }
+};
+
+//DELETE DINO FUNC & EVENT LISTENER
+const deleteDinoEvent = (e) => {
+    const dinoId = e.target.closest('.card').id;
+    const dinoPosition = dinos.findIndex((currentDino) => currentDino.id === dinoId);
+    dinos.splice(dinoPosition, 1);
+    printDinos(dinos);
+};
+
+const deleteEvents = () => {
+    const dinoDeleteButtons = document.getElementsByClassName('delete-dino');
+    for (let i = 0; i < dinoDeleteButtons.length; i++) {
+        dinoDeleteButtons[i].addEventListener('click', deleteDinoEvent);
+    }
+}
+
 
 // PRINT DINOS FUNC
 const printDinos = (dinoArray) => {
@@ -106,6 +122,7 @@ const printDinos = (dinoArray) => {
       domString += `  <h5 class="card-title">${dinoArray[i].name}</h5>`;
       domString += `  <p class="card-text">Health: ${dinoArray[i].health}</p>`;
       domString += '<button class="btn btn-outline-dark single-dino"><i class="fas fa-eye"></i></button>';
+      domString += '<button class="btn btn-outline-danger delete-dino"><i class="fas fa-trash-alt"></i></button>';
       domString += '</div>';
       domString += '</div>';
       domString += '</div>';
@@ -113,6 +130,7 @@ const printDinos = (dinoArray) => {
     printToDom('kennel', domString);
     singleDinoAddEvents();
     petEvents();
+    deleteEvents();
   };
 
 // CREATE DINO IN ACCORDION FORM
