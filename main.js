@@ -53,7 +53,9 @@ const viewSingleDino = (e) => {
     domString += `           <p>Age: ${selectedDino.age}</p>`;
     domString += `           <p>Type: ${selectedDino.type}</p>`;
     domString += `           <p>Owner: ${selectedDino.owner}</p>`;
-    domString += `           <p>Health: ${selectedDino.health}</p>`;
+    domString += '  <div class="progress">';
+    domString += `      <div class="progress-bar bg-success" role="progressbar" style="width: ${selectedDino.health}%" aria-valuenow="${selectedDino.health}" aria-valuemin="0" aria-valuemax="100"></div>`;
+    domString += '  </div>';
     domString += '       </div>';
     domString += ' </div>';
     domString += '</div>';
@@ -110,6 +112,26 @@ const deleteEvents = () => {
     }
 }
 
+// FEED DINOS
+const feedMe = (e) => {
+    const dinoId = e.target.closest('.card').id;
+    const dinoPosition = dinos.findIndex((currentDino) => currentDino.id === dinoId);
+    if (dinos[dinoPosition].health < 90) {
+        dinos[dinoPosition].health += 10;
+        printDinos(dinos);
+    } else if (dinos[dinoPosition].health > 89 && dinos[dinoPosition].health < 100) {
+            dinos[dinoPosition].health = 100;
+            printDinos(dinos);
+    };
+};
+
+const feedEvents = () => {
+    const dinoFeedButtons = document.getElementsByClassName('feed-dino');
+    for (let i = 0; i < dinoFeedButtons.length; i++) {
+        dinoFeedButtons[i].addEventListener('click', feedMe);
+    }
+};
+
 
 // PRINT DINOS FUNC
 const printDinos = (dinoArray) => {
@@ -120,9 +142,12 @@ const printDinos = (dinoArray) => {
       domString += `<img class="card-img-top dino-photo" src="${dinoArray[i].imageUrl}" alt="Card image cap">`;
       domString += '<div class="card-body">';
       domString += `  <h5 class="card-title">${dinoArray[i].name}</h5>`;
-      domString += `  <p class="card-text">Health: ${dinoArray[i].health}</p>`;
+      domString += '<div class="progress">';
+      domString += `<div class="progress-bar bg-success" role="progressbar" style="width: ${dinoArray[i].health}%" aria-valuenow="${dinoArray[i].health}" aria-valuemin="0" aria-valuemax="100"></div>`;
+      domString += '</div>';
       domString += '<button class="btn btn-outline-dark single-dino"><i class="fas fa-eye"></i></button>';
       domString += '<button class="btn btn-outline-danger delete-dino"><i class="fas fa-trash-alt"></i></button>';
+      domString += '<button class="btn btn-outline-success feed-dino"><i class="fas fa-carrot"></i></button>';
       domString += '</div>';
       domString += '</div>';
       domString += '</div>';
@@ -131,6 +156,7 @@ const printDinos = (dinoArray) => {
     singleDinoAddEvents();
     petEvents();
     deleteEvents();
+    feedEvents();
   };
 
 // CREATE DINO IN ACCORDION FORM
