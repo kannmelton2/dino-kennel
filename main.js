@@ -100,7 +100,7 @@ const printToDom = (divId, textToPrint) => {
 // CLOSE SINGLE VIEW
 const closeSingleViewEvent = () => {
     printToDom('single-view', '');
-    printDinos(dinos);
+    buildAllDinos();
 };
 
 // ADVENTURE TABLE BUILDER
@@ -131,6 +131,7 @@ const viewSingleDino = (e) => {
     domString += ' </div>';
     domString += '</div>';
     printToDom('kennel', '');
+    printToDom('hospital', '');
     printToDom('single-view', domString);
     document.getElementById('close-single-view').addEventListener('click', closeSingleViewEvent);
 };
@@ -152,7 +153,7 @@ const dinoHealth = (e) => {
     const dinoPosition = dinos.findIndex((currentDino) => currentDino.id === dinoId)
     if (dinos[dinoPosition].health < 100) {
     dinos[dinoPosition].health += 1;
-    printDinos(dinos);
+    buildAllDinos();
     };
 };
 
@@ -169,7 +170,7 @@ const deleteDinoEvent = (e) => {
     const dinoId = e.target.closest('.card').id;
     const dinoPosition = dinos.findIndex((currentDino) => currentDino.id === dinoId);
     dinos.splice(dinoPosition, 1);
-    printDinos(dinos);
+    buildAllDinos();
 };
 
 const deleteEvents = () => {
@@ -185,10 +186,10 @@ const feedMe = (e) => {
     const dinoPosition = dinos.findIndex((currentDino) => currentDino.id === dinoId);
     if (dinos[dinoPosition].health < 90) {
         dinos[dinoPosition].health += 10;
-        printDinos(dinos);
+        buildAllDinos(dinos);
     } else if (dinos[dinoPosition].health > 89 && dinos[dinoPosition].health < 100) {
             dinos[dinoPosition].health = 100;
-            printDinos(dinos);
+            buildAllDinos();
     };
 };
 
@@ -221,11 +222,15 @@ const printDinos = (dinoArray, divId) => {
       domString += '</div>';
     }
     printToDom(divId, domString);
-    singleDinoAddEvents();
-    petEvents();
-    deleteEvents();
-    feedEvents();
   };
+
+  // ADD EVENTS
+  const addEvents = () => {
+      singleDinoAddEvents();
+      petEvents();
+      deleteEvents();
+      feedEvents();
+  }
 
 // CREATE DINO IN ACCORDION FORM
 const newDino = (e) => {
@@ -244,7 +249,7 @@ const newDino = (e) => {
     dinos.push(brandNewDino);
     document.getElementById('new-dino-form').reset();
     document.getElementById('collapseOne').classList.remove('show');
-    buildDinos(dinos);
+    buildAllDinos(dinos);
 };
 
 // FIND HOSPITAL DINOS
@@ -259,14 +264,15 @@ const findLiveHealthyDinos = () => {
     printDinos(liveHealthyDinos, 'kennel');
 };
 
-const buildDinos = () => {
+const buildAllDinos = () => {
     findHospitalDinos();
     findLiveHealthyDinos();
+    addEvents();
 }
 
 
 const init = () => {
-    buildDinos();
+    buildAllDinos();
     document.getElementById('submit-new-dino').addEventListener('click', newDino);
 };
 
