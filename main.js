@@ -201,22 +201,35 @@ const feedEvents = () => {
     }
 };
 
+// PRINT BUTTONS
+printButtons = (divId) => {
+    let domString = '';
+    domString += '<div class="row">';
+    domString += `<div class="col-6"><button class="col-12 btn btn-outline-success feed-button ${divId === 'graveyard' ? 'disabled' : ''}"><i class="fas fa-drumstick-bite"></i></button></div>`;
+    domString += `<div class="col-6"><button class="col-12 btn btn-outline-warning adv-button ${divId === 'graveyard' ? 'disabled' : ''}"><i class="fas fa-hiking"></i></button></div>`;
+    domString += '</div>';
+    domString += '<div class="row">';
+    domString += `<div class="col-6"><button class="col-12 btn btn-outline-dark single-dino"><i class="far fa-eye"></i></button></div>`;
+    domString += `<div class="col-6"><button class="col-12 btn btn-outline-danger delete-dino ${divId === 'graveyard' ? 'disabled' : ''}"><i class="far fa-trash-alt"></i></button></div>`;
+    domString += '</div>';
+  
+    return domString;
+}
+
 
 // PRINT DINOS FUNC
 const printDinos = (dinoArray, divId) => {
     let domString = '';
     for (let i =0; i < dinoArray.length; i++){
       domString += '<div class="col-4">';
-      domString += `<div class="card" id="${dinoArray[i].id}">`;
-      domString += `<img class="card-img-top dino-photo" src="${dinoArray[i].imageUrl}" alt="Card image cap">`;
+      domString += `<div id="${dinoArray[i].id}" class="card">`;
+      domString += `<img class="card-img-top ${divId !== 'graveyard' ? 'dino-photo' : ''}" src="${dinoArray[i].imageUrl}" alt="Card image cap">`;
       domString += '<div class="card-body">';
       domString += `  <h5 class="card-title">${dinoArray[i].name}</h5>`;
       domString += '<div class="progress">';
       domString += `<div class="progress-bar bg-success" role="progressbar" style="width: ${dinoArray[i].health}%" aria-valuenow="${dinoArray[i].health}" aria-valuemin="0" aria-valuemax="100"></div>`;
       domString += '</div>';
-      domString += '<button class="btn btn-outline-dark single-dino"><i class="fas fa-eye"></i></button>';
-      domString += '<button class="btn btn-outline-danger delete-dino"><i class="fas fa-trash-alt"></i></button>';
-      domString += '<button class="btn btn-outline-success feed-dino"><i class="fas fa-carrot"></i></button>';
+      domString += printButtons(divId);
       domString += '</div>';
       domString += '</div>';
       domString += '</div>';
@@ -258,6 +271,12 @@ const findHospitalDinos = () => {
     printDinos(hospitalDinos, 'hospital');
 };
 
+// FIND DEAD DINOS
+const findDeadDinos = () => {
+    const deadDinos = dinos.filter((x) => x.health < 1);
+    printDinos(deadDinos, 'graveyard');
+};
+
 // FIND LIVE HEALTHY DINOS
 const findLiveHealthyDinos = () => {
     const liveHealthyDinos = dinos.filter((x) => x.health > 39);
@@ -266,6 +285,7 @@ const findLiveHealthyDinos = () => {
 
 const buildAllDinos = () => {
     findHospitalDinos();
+    findDeadDinos();
     findLiveHealthyDinos();
     addEvents();
 }
